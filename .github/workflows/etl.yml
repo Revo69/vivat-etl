@@ -2,8 +2,8 @@ name: Vivat ETL
 
 on:
   schedule:
-    - cron: '0 6 * * *'  # каждый день в 6:00 UTC
-  workflow_dispatch:     # запуск вручную
+    - cron: '0 6 * * *'  # runs every day at 6:00 AM UTC
+  workflow_dispatch:     # manual trigger
 
 jobs:
   run-etl:
@@ -28,6 +28,10 @@ jobs:
       run: |
         git config --global user.name "github-actions"
         git config --global user.email "github-actions@github.com"
-        git add db/books_links.sqlite3
-        git commit -m "Update raw_links DB"
-        git push
+        if git diff --quiet db/books_links.sqlite3; then
+          echo "No changes to commit."
+        else
+          git add db/books_links.sqlite3
+          git commit -m "Update raw_links DB"
+          git push
+        fi
