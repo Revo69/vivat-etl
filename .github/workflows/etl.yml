@@ -23,3 +23,11 @@ jobs:
 
     - name: Run parser
       run: python etl/parser.py
+
+    - name: Commit updated DB
+      run: |
+        git config --global user.name "github-actions"
+        git config --global user.email "github-actions@github.com"
+        git add db/books_links.sqlite3
+        git commit -m "Update raw_links DB"
+        git push
