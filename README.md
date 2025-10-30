@@ -96,4 +96,3 @@ Developed and maintained by [Serghei](https://github.com/Revo69) — passionate 
 ## 🛡️ License
 
 MIT License — feel free to use, modify, and share.
-```
