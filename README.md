@@ -89,7 +89,7 @@ Includes auto-commit logic to push updated SQLite DB only if changes are detecte
 
 ## 👤 Author
 
-Developed and maintained by [Sergey](https://github.com/Revo69) — passionate about Data Engineering and Computer Vision.
+Developed and maintained by [Serghei](https://github.com/Revo69) — passionate about Data Engineering and Computer Vision.
 
 ---
 
