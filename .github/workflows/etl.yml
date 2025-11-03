@@ -12,6 +12,8 @@ jobs:
     steps:
     - name: Checkout repo
       uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # важно для git show и коммитов
 
     - name: Set up Python
       uses: actions/setup-python@v4
@@ -23,24 +25,14 @@ jobs:
 
     - name: Run parser
       run: python etl/parser.py
-      
-    - name: Commit updated DB if hash changed
+
+    - name: Commit updated DB
       run: |
         git config --global user.name "github-actions"
         git config --global user.email "github-actions@github.com"
-    
-        echo "🔍 Проверка хэшей:"
-        OLD_HASH=$(git show HEAD:db/books_links.sqlite3 2>/dev/null | sha256sum | awk '{print $1}')
-        NEW_HASH=$(sha256sum db/books_links.sqlite3 | awk '{print $1}')
-    
-        echo "OLD_HASH: $OLD_HASH"
-        echo "NEW_HASH: $NEW_HASH"
-    
-        if [ "$OLD_HASH" = "$NEW_HASH" ]; then
-          echo "✅ No changes to commit."
-        else
-          echo "📦 Changes detected, committing..."
-          git add db/books_links.sqlite3
-          git commit -m "Update raw_links DB"
-          git push
-        fi
+
+        git pull --rebase
+
+        git add db/books_links.sqlite3
+        git commit -m "Update raw_links DB" || echo "✅ No changes to commit."
+        git push
