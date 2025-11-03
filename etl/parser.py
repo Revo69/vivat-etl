@@ -63,7 +63,7 @@ try:
 finally:
     driver.quit()
 
-def save_links_to_db(links, db_path='books_links.sqlite3'):
+def save_links_to_db(links, db_path='db/books_links.sqlite3'):
     """Сохраняет список ссылок в SQLite.
     Перед вставкой проверяет наличие URL и вставляет только новые.
     """
