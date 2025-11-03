@@ -13,7 +13,7 @@ jobs:
     - name: Checkout repo
       uses: actions/checkout@v4
       with:
-        fetch-depth: 0  # важно для git show и коммитов
+        fetch-depth: 0  # important for git show and commits.
 
     - name: Set up Python
       uses: actions/setup-python@v4
