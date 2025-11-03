@@ -15,7 +15,7 @@ logging.basicConfig(
 
 base_url = "https://vivat.com.ua/category/khudozhni-knyhy/?sort=-pubdate"
 all_links = set()
-max_pages = 20
+max_pages = 5
 
 options = Options()
 options.add_argument("--headless=new")
