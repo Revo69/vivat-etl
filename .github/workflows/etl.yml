@@ -47,5 +47,5 @@ jobs:
     - name: 📎 Upload logs as artifacts
       uses: actions/upload-artifact@v3
       with:
-        name: etl-logs
+        name: etl-logs-${{ github.run_id }}
         path: logs/
