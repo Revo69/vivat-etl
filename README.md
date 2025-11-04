@@ -113,26 +113,69 @@ It performs:
 - Commits updated SQLite DB
 - Uploads logs as artifacts for inspection
 
-### Secrets used:
+---
 
-- `SUPABASE_URL`
-- `SUPABASE_KEY`
+## ☁️ Supabase Integration
 
-Stored securely via **Settings → Secrets → Actions**.
+Vivat ETL securely uploads parsed book metadata to a Supabase table (`book_data`) using the **service-role API key**.
+
+- ✅ Uses `SUPABASE_URL` and `SUPABASE_KEY` from `.env` or GitHub Secrets
+- ✅ Uploads only validated records with non-empty `title` and `isbn`
+- ✅ Automatically marks uploaded records with `uploaded = true` in SQLite
+
+Supabase REST API is accessed via:
+
+```http
+POST https://your-project.supabase.co/rest/v1/book_data
+Authorization: Bearer <service-role-key>
+Content-Type: application/json
+```
 
 ---
 
-## 📎 Logs & Artifacts
+## 🔐 Row-Level Security (RLS)
 
-After each run, logs from `logs/` are uploaded as artifacts:
+To ensure secure access, **Row-Level Security (RLS)** is enabled on all Supabase tables.
 
-- `parser.log`
-- `parse_books.log`
-- `upload.log`
+- ✅ `book_data` allows `INSERT` only for `service_role` via policy:
+  ```sql
+  CREATE POLICY "Allow insert for service role"
+  ON book_data
+  FOR INSERT
+  TO service_role
+  WITH CHECK (true);
+  ```
+- ❌ Other roles (`anon`, `authenticated`) cannot insert into `book_data`
+- ✅ Other tables (`user`, `profile`, `book_post`) are protected and accessible only to backend
 
-You can download them from the **Artifacts** section of each workflow run.
+This ensures GitHub Actions can write safely, while frontend/backend access remains isolated.
 
 ---
+
+## ⚙️ GitHub Actions Logging & Artifacts
+
+Each ETL run is fully logged and traceable via GitHub Actions:
+
+- 📅 Runs daily at 6:00 UTC or manually via `workflow_dispatch`
+- 📦 Uploads logs as artifacts:
+  - `parser.log` — link scraping
+  - `parse_books.log` — metadata parsing
+  - `upload.log` — Supabase upload status
+
+Example artifact upload step:
+
+```yaml
+- name: 📎 Upload logs as artifacts
+  uses: actions/upload-artifact@v4
+  with:
+    name: etl-logs-${{ github.run_id }}
+    path: logs/
+```
+
+Artifacts are downloadable from the workflow run page for debugging and auditing.
+
+---
+
 
 ## 📌 Future Plans
 
