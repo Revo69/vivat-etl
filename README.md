@@ -207,7 +207,7 @@ graph TD
 
 ## 👤 Author
 
-Developed and maintained by [Serghei](https://github.com/Revo69) — passionate about Data Engineering, Computer Vision, and clean architecture.
+Developed and maintained by [Serghei](https://github.com/Revo69) — passionate about Data Engineering and clean architecture.
 
 ---
 
