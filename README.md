@@ -176,6 +176,23 @@ Artifacts are downloadable from the workflow run page for debugging and auditing
 
 ---
 
+## 📊 Pipeline Architecture
+
+```mermaid
+graph TD
+    A[GitHub Actions Trigger] --> B[parser.py: Scrape book links]
+    B --> C[SQLite: raw_links]
+    C --> D[parse_books.py: Extract metadata]
+    D --> E[SQLite: raw_books]
+    E --> F[upload_to_supabase.py: POST to Supabase]
+    F --> G[Supabase: book_data table]
+    B -->|parser.log| H[Logs: parser.log]
+    D -->|parse_books.log| H
+    F -->|upload.log| H
+    H --> I[GitHub Actions: Upload artifacts]
+```
+
+---
 
 ## 📌 Future Plans
 
