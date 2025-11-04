@@ -1,22 +1,33 @@
+import os
+import time
+import logging
+import sqlite3
+from urllib.parse import urlparse, parse_qsl, urlencode, urlunparse
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from bs4 import BeautifulSoup
-import time
-import sqlite3
-from urllib.parse import urlparse, parse_qsl, urlencode, urlunparse
-import logging
+
+# Настройка логирования
+LOG_PATH = os.path.join("logs", "parser.log")
+os.makedirs("logs", exist_ok=True)
 
 logging.basicConfig(
     level=logging.INFO,
     format='[%(asctime)s] %(levelname)s: %(message)s',
-    datefmt='%Y-%m-%d %H:%M:%S'
+    datefmt='%Y-%m-%d %H:%M:%S',
+    handlers=[
+        logging.FileHandler(LOG_PATH, encoding='utf-8'),
+        logging.StreamHandler()
+    ]
 )
 
-
-base_url = "https://vivat.com.ua/category/khudozhni-knyhy/?sort=-pubdate"
+# Настройки парсинга
+BASE_URL = "https://vivat.com.ua/category/khudozhni-knyhy/?sort=-pubdate"
+MAX_PAGES = 5
+DB_PATH = os.path.join("db", "books_links.sqlite3")
 all_links = set()
-max_pages = 5
 
+# Настройка Selenium
 options = Options()
 options.add_argument("--headless=new")
 options.add_argument("--disable-gpu")
@@ -63,7 +74,8 @@ try:
 finally:
     driver.quit()
 
-def save_links_to_db(links, db_path='db/books_links.sqlite3'):
+# Сохраняем ссылки в SQLite
+def save_links_to_db(links, db_path=DB_PATH):
     """Сохраняет список ссылок в SQLite.
     Перед вставкой проверяет наличие URL и вставляет только новые.
     """
@@ -92,7 +104,7 @@ def save_links_to_db(links, db_path='db/books_links.sqlite3'):
         cur.execute("SELECT COUNT(*) FROM raw_links")
         after = cur.fetchone()[0]
 
-        logging.info("Saved %d new links to %s (total %d)", after - before, db_path, after)
+        logging.info("Saved %d new links to %s (total %d)", after - before, after)
 
     except Exception as e:
         logging.error("Error saving links to DB: %s", e)
