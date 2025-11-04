@@ -64,7 +64,7 @@ def parse_book(url):
                     if label_text.lower() == key.lower():
                         book_info[field] = value_text
 
-    title = soup.find('h1', class_='sc-a214812c-1 eYwEtb')
+    title = soup.find('h1', class_='sc-72ae4fce-1 euXUYE')
     if title:
         book_info['title'] = title.text.strip()
 
