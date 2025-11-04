@@ -35,7 +35,7 @@ options.add_experimental_option('excludeSwitches', ['enable-logging'])
 driver = webdriver.Chrome(options=options)
 
 try:
-    for page in range(1, max_pages + 1):
+    for page in range(1, MAX_PAGES + 1):
         # Корректно обновляем/добавляем параметр page в query-string
         parsed = urlparse(base_url)
         q = dict(parse_qsl(parsed.query))
