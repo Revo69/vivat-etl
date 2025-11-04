@@ -1,5 +1,7 @@
 # 📚 Vivat ETL
 
+[![Vivat ETL](https://github.com/Revo69/vivat-etl/actions/workflows/etl.yml/badge.svg)](https://github.com/Revo69/vivat-etl/actions/workflows/etl.yml)
+
 An automated ETL pipeline for collecting book links and metadata from [vivat.com.ua](https://vivat.com.ua), storing them in SQLite, and uploading structured data to Supabase.
 
 ---
