@@ -43,3 +43,9 @@ jobs:
         git add db/books_links.sqlite3
         git commit -m "Update DB after ETL run"
         git push
+        
+    - name: 📎 Upload logs as artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: etl-logs
+        path: logs/
