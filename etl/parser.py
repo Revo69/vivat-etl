@@ -37,7 +37,7 @@ driver = webdriver.Chrome(options=options)
 try:
     for page in range(1, MAX_PAGES + 1):
         # Корректно обновляем/добавляем параметр page в query-string
-        parsed = urlparse(base_url)
+        parsed = urlparse(BASE_URL)
         q = dict(parse_qsl(parsed.query))
         if page == 1:
             q.pop('page', None)  # первая страница — без page
