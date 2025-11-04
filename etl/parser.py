@@ -104,7 +104,7 @@ def save_links_to_db(links, db_path=DB_PATH):
         cur.execute("SELECT COUNT(*) FROM raw_links")
         after = cur.fetchone()[0]
 
-        logging.info("Saved %d new links to %s (total %d)", after - before, after)
+        logging.info("Saved %d new links (total %d)", after - before, after)
 
     except Exception as e:
         logging.error("Error saving links to DB: %s", e)
