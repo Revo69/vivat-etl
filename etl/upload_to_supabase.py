@@ -41,7 +41,7 @@ def upload_book(record):
         "isbn": record["isbn"]
     }
     try:
-        supabase.table("book_data").insert(payload).execute()
+        supabase.table("book_data").upsert(payload, on_conflict=["isbn"]).execute()
         return True
     except Exception as e:
         logging.error("❌ Failed to upload ISBN %s: %s", record["isbn"], e)
