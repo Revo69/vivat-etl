@@ -97,6 +97,17 @@ def main():
                     pages_count, cover_type, publication_year,
                     translator, book_language, isbn
                 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ON CONFLICT(isbn) DO UPDATE SET
+                    link_id = excluded.link_id,
+                    title = excluded.title,
+                    author = excluded.author,
+                    seria = excluded.seria,
+                    publisher = excluded.publisher,
+                    pages_count = excluded.pages_count,
+                    cover_type = excluded.cover_type,
+                    publication_year = excluded.publication_year,
+                    translator = excluded.translator,
+                    book_language = excluded.book_language
             """, (
                 link_id,
                 book_data['title'],
@@ -110,13 +121,17 @@ def main():
                 book_data['book_language'],
                 book_data['isbn']
             ))
-            cur.execute("UPDATE raw_links SET processed = 1, updated_at = ? WHERE id = ?", (datetime.now(), link_id))
+        
+            cur.execute("""
+                UPDATE raw_links SET processed = 1, updated_at = ? WHERE id = ?
+            """, (datetime.now(), link_id))
+        
             conn.commit()
-            logging.info("✅ Saved: %s", book_data['title'])
-        except sqlite3.IntegrityError:
-            logging.warning("⚠️ Duplicate ISBN: %s", book_data['isbn'])
+            logging.info("✅ Upserted: %s", book_data['title'])
+        
         except Exception as e:
             logging.error("❌ Error while saving to database: %s", e)
+
 
         time.sleep(0.5)
 
