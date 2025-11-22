@@ -38,10 +38,10 @@ jobs:
 
     - name: 📝 Commit updated DB
       run: |
-        git config --global user.name "github-actions"
-        git config --global user.email "github-actions@github.com"
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
         git add db/books_links.sqlite3
-        git commit -m "Update DB after ETL run"
+        git commit -m "Update DB after ETL run" || echo "No changes to commit"
         git push
         
     - name: 📎 Upload logs as artifacts
