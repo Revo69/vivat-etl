@@ -2,50 +2,39 @@ name: Vivat ETL
 
 on:
   schedule:
-    - cron: '0 6 * * *'  # runs every day at 6:00 AM UTC
-  workflow_dispatch:     # manual trigger
+    - cron: '0 6 * * *'
+  workflow_dispatch:
 
 jobs:
   run-etl:
     runs-on: ubuntu-latest
-
     env:
       SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
       SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
 
     steps:
-    - name: 📥 Checkout repo
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
-    - name: 🐍 Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.11'
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
 
-    - name: 📦 Install dependencies
-      run: pip install -r requirements.txt
+      - name: Install dependencies
+        run: pip install -r requirements.txt
 
-    - name: 🔗 Run parser (collect links)
-      run: python etl/parser.py
+      - name: Run parser (collect links)
+        run: python etl/parser.py
 
-    - name: 📚 Run parse_books (extract metadata)
-      run: python etl/parse_books.py
+      - name: Run parse_books (extract metadata)
+        run: python etl/parse_books.py
 
-    - name: 🚀 Run upload_to_supabase (sync to cloud)
-      run: python etl/upload_to_supabase.py
+      - name: Run upload_to_supabase
+        run: python etl/upload_to_supabase.py
 
-    - name: 📝 Commit updated DB
-      run: |
-        git config --global user.name "github-actions[bot]"
-        git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-        git add db/books_links.sqlite3
-        git commit -m "Update DB after ETL run" || echo "No changes to commit"
-        git push
-        
-    - name: 📎 Upload logs as artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: etl-logs-${{ github.run_id }}
-        path: logs/
+      - name: Upload logs
+        uses: actions/upload-artifact@v4
+        with:
+          name: vitat-etl-logs-${{ github.run_id }}
+          path: logs/
