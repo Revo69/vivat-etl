@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 from config import DB_PATH, LOG_PARSE_BOOKS, HEADERS, FIELDS
 
-# Логирование
+# Logging
 logging.basicConfig(
     level=logging.INFO,
     format='[%(asctime)s] %(levelname)s: %(message)s',
