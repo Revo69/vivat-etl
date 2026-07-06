@@ -184,7 +184,7 @@ graph TD
     D --> E[SQLite: raw_books]
     E --> F[upload_to_supabase.py: POST to Supabase]
     F --> G[Supabase: book_data table]
-    H --> I[GitHub Actions: Upload artifacts]
+    G --> H[GitHub Actions: Upload artifacts]
 ```
 
 ---
