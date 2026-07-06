@@ -30,10 +30,6 @@ vivat-etl/
 │   ├── config.py            # Centralized paths and settings
 ├── db/
 │   └── books_links.sqlite3  # SQLite database
-├── logs/
-│   ├── parser.log           # Link scraping logs
-│   ├── parse_books.log      # Metadata parsing logs
-│   └── upload.log           # Supabase upload logs
 ├── requirements.txt         # Python dependencies
 └── README.md                # Project documentation
 ```
@@ -188,9 +184,6 @@ graph TD
     D --> E[SQLite: raw_books]
     E --> F[upload_to_supabase.py: POST to Supabase]
     F --> G[Supabase: book_data table]
-    B -->|parser.log| H[Logs: parser.log]
-    D -->|parse_books.log| H
-    F -->|upload.log| H
     H --> I[GitHub Actions: Upload artifacts]
 ```
 
